@@ -1,0 +1,27 @@
+<launch>
+
+    <node name="reprojection" pkg="camera_2d_lidar_calibration" type="reprojection.py" output="screen">
+        <param name="scan_topic" value="/scan" />
+        <param name="image_topic" value="/usb_cam/image_raw" />
+        <param name="calib_file" value="$(find camera_2d_lidar_calibration)/data/calibration_result.txt" />
+        <param name="config_file" value="$(find camera_2d_lidar_calibration)/config/config.yaml" />
+        <param name="laser_point_radius" type="int" value="3" />    <!-- Reprojected laser point radius size in pixels -->
+        <param name="time_diff" type="double" value="1" />  <!-- Maximum time difference in seconds between image and laser scan to be registered and processed -->
+    </node>
+    
+    <include file="$(find xycar_lidar)/launch/lidar_noviewer.launch" />
+       
+    <node name="usb_cam" output="screen" pkg="usb_cam" type="usb_cam_node">
+        <param name="video_device" value="/dev/videoCAM" />
+        <param name="autoexposure" value="false" />
+        <param name="exposure" value="50" />
+        <param name="image_width" value="640" />
+        <param name="image_height" value="480" />
+        <param name="pixel_format" value="yuyv" />
+        <param name="camera_frame_id" value="usb_cam" />
+        <param name="io_method" value="mmap" />
+    </node>
+
+    <node name="rviz" type="rviz" pkg="rviz" args="-d $(find camera_2d_lidar_calibration)/rviz/reprojection.rviz"/>
+
+</launch>

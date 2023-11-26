@@ -1,0 +1,9 @@
+crosswalk
+dontcare
+left
+right
+stop
+sz_car
+traffic_light_green
+traffic_light_red
+traffic_light_yellow
